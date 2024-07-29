@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function NavBarLayout({
   children,
 }: {
@@ -6,7 +8,12 @@ export default function NavBarLayout({
   return (
     <div>
       {children}
-      <nav>Navbar</nav>
+      <nav className="flex gap-4">
+        <Link href="/">Home</Link>
+        <Link href="/movies">Movies</Link>
+        <Link href="/bookmarks">Bookmarks</Link>
+        <Link href="/profile">Profile</Link>
+      </nav>
     </div>
   );
 }

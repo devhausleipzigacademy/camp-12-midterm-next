@@ -1,7 +1,7 @@
 export default function ProfilePage() {
   return (
     <div>
-      <span>Bookmarks</span>
+      <span>Profile</span>
     </div>
   );
 }
