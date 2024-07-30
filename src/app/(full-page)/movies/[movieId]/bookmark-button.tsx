@@ -2,7 +2,7 @@
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
-export default function Heart({ params }: { params: { movieId: string } }) {
+export function BookmarkButton({ params }: { params: { movieId: string } }) {
   const [toggleHeart, setToggleHeart] = useState(false);
   const [currentId, setCurrentId] = useState<string[]>([]);
   useEffect(() => {
@@ -21,14 +21,17 @@ export default function Heart({ params }: { params: { movieId: string } }) {
   };
 
   return (
-    <HeartIcon
-      className={`size-6 text-red ${
-        currentId.includes(params.movieId || "") ? "fill-red" : "fill-none"
-      } `}
+    <button
       onClick={() => {
         if (!params.movieId) return;
         handleClick(params.movieId);
       }}
-    ></HeartIcon>
+    >
+      <HeartIcon
+        className={`size-6 text-red ${
+          currentId.includes(params.movieId || "") ? "fill-red" : "fill-none"
+        } `}
+      />
+    </button>
   );
 }

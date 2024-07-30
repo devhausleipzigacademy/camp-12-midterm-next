@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { MovieCredit, MovieDetail } from "@/lib/types/movie";
-import Heart from "@/components/heart-icon";
+import { BookmarkButton } from "./bookmark-button";
 import ReadMore from "@/components/read-more";
 
 export default async function MovieDetails({
@@ -42,7 +42,7 @@ export default async function MovieDetails({
 
   return (
     <section className="flex flex-col h-full min-h-screen bg-dark px-4 overflow-x-hidden">
-      <div className="flex-grow text-white">
+      <div className="flex-grow text-white mb-4">
         <div className="flex flex-row justify-between my-2 h-16 items-center">
           {/* link back to movies */}
           <Link href="/movies">
@@ -57,7 +57,7 @@ export default async function MovieDetails({
           </Link>
 
           <h1 className="text-white text-base font-bold">Movie Detail</h1>
-          <Heart params={{ movieId: params.movieId }} />
+          <BookmarkButton params={{ movieId: params.movieId }} />
         </div>
         <div
           className={`h-52 bg-orange-300 rounded-lg mb-4 w-full max-h-full max-w-full bg-cover bg-no-repeat bg-center`}
@@ -96,7 +96,8 @@ export default async function MovieDetails({
               .filter((e: { job: string }) => e.job === "Writer")
               .map((e: { id: number; name: string }) => (
                 <p key={e.id}>{e.name} </p>
-              ))}
+              ))
+              .slice(0, 1)}
           </div>
           <Link
             href="cast-and-crew"
@@ -111,7 +112,7 @@ export default async function MovieDetails({
       </div>
       <div className="text-dark-light mt-auto mb-4">
         <Link
-          className="rounded-lg font-semibold w-full bg-yellow disabled:bg-yellow/50"
+          className="rounded-lg font-semibold w-full bg-yellow disabled:bg-yellow/50 py-4 block text-center"
           href={`/movies/${params.movieId}/time`}
         >
           Get Reservation
