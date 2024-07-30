@@ -32,8 +32,6 @@ export default async function MovieDetails({
     )
     .then((res) => res.data);
 
-  const [truncate, setTruncate] = useState(true);
-
   const userRating = movie.vote_average * 10;
   const ratingColorClass =
     userRating < 50
@@ -109,12 +107,7 @@ export default async function MovieDetails({
         </div>
         <hr className="h-px my-4 border-0 bg-white-dimmed" />
         <h2 className="text-sm pb-3">Synopsis</h2>
-        <p
-          className={`text-white-dimmed text-sm ${truncate ? "truncate" : ""}`}
-        >
-          {movie.overview}
-        </p>
-        <ReadMore />
+        <ReadMore overview={movie.overview} />
       </div>
       <div className="text-dark-light mt-auto mb-4">
         <Link
