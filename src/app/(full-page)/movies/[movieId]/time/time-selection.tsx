@@ -1,26 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useContext } from "react";
 import { DisplayDate } from "./display-date";
 import { TimeSlots } from "./time-slots";
+import { BookingContext } from "@/providers/booking-context";
 
 export function TimeSelection() {
   const today = new Date();
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const { time, setTime, date, setDate } = useContext(BookingContext);
 
   return (
     <div>
       <DisplayDate
         today={today}
-        selectedDate={selectedDate}
-        handleClick={(date: string) => setSelectedDate(date)}
+        selectedDate={date}
+        handleClick={(date: string) => setDate(date)}
       />
       <div className="h-px my-5 bg-white-dimmed-heavy"></div>
       <div className="w-full">
         <TimeSlots
-          selectedTime={selectedTime}
-          handleClick={(time: string) => setSelectedTime(time)}
+          selectedTime={time}
+          handleClick={(time: string) => setTime(time)}
         />
       </div>
     </div>
