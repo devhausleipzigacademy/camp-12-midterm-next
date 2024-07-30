@@ -34,24 +34,6 @@ export default async function MovieDetails({
 
   const [truncate, setTruncate] = useState(true);
 
-  // const [toggleHeart, setToggleHeart] = useState(false);
-  // const [currentId, setCurrentId] = useState<string[]>([]);
-  // useEffect(() => {
-  //   localStorage.setItem("Movies", JSON.stringify(currentId));
-  // }, [currentId]);
-
-  // as server action
-  // const handleClick = (movieId: string) => {
-  //   setToggleHeart(!toggleHeart);
-  //   setCurrentId((prevSelectedId) => {
-  //     if (prevSelectedId.includes(movieId)) {
-  //       return prevSelectedId.filter((i) => i !== movieId);
-  //     } else {
-  //       return [...prevSelectedId, movieId];
-  //     }
-  //   });
-  // };
-
   const userRating = movie.vote_average * 10;
   const ratingColorClass =
     userRating < 50
@@ -59,12 +41,6 @@ export default async function MovieDetails({
       : userRating <= 75
       ? "text-orange-500"
       : "text-green";
-
-  // see the actual data entries from tmdb
-
-  // function readMoreHandler() {
-  //   setTruncate(!truncate);
-  // }
 
   return (
     <section className="flex flex-col h-full min-h-screen bg-dark px-4 overflow-x-hidden">
