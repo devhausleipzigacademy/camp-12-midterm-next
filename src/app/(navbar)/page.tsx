@@ -4,12 +4,16 @@ import { HomepageHeader } from "./header";
 import { SectionTitle } from "@/components/section-title";
 import { GenreButton } from "@/components/genre-button";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { protectPage, validateRequest } from "@/lib/auth";
 
 export default async function HomePage({
   searchParams,
 }: {
   searchParams: { genre: string | string[] };
 }) {
+  await protectPage();
+
   const selectedGenres = Array.isArray(searchParams.genre)
     ? searchParams.genre
     : [searchParams.genre];
