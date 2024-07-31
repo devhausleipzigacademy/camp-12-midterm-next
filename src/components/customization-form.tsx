@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input, Button } from "@headlessui/react";
 import { z } from "zod";
-import { User } from "@/lib/types/user";
+import { User } from "lucia";
 import { updateUser } from "@/lib/actions";
 
 export type UserSchema = z.infer<typeof userSchema>;

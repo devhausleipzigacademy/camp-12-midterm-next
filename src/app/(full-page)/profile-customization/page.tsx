@@ -5,18 +5,19 @@ import Link from "next/link";
 import { CustomizationForm } from "@/components/customization-form";
 import { SelectAvatar } from "@/components/select-avatar";
 import { prisma } from "@/lib/db";
+import { protectPage, validateRequest } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { Lucia } from "lucia";
+import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
+import { User as DBUser } from "@prisma/client";
 
 type UserSchema = z.infer<typeof userSchema>;
 
-export default async function ProfileCustomization() {
-  const userId = "ddeeba94-b5a2-4eb4-8229-0b2b3630ecf3";
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
+// TODO db push after merge
+// TODO
 
-  if (!user) {
-    return <div>User not found</div>;
-  }
+export default async function ProfileCustomization() {
+  const user = await protectPage();
 
   return (
     <div className="bg-dark h-full text-white flex flex-col">
@@ -40,7 +41,7 @@ export default async function ProfileCustomization() {
       <main className="flex-1 p-4 overflow-y-auto">
         <h1 className="text-2xl font-bold mb-4">Profile Customization</h1>
         <CustomizationForm
-          id={userId}
+          id={sessionStorage.id}
           user={user}
           profileImg={""}
           bookmarks={""}
