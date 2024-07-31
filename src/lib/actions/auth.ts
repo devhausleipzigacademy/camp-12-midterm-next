@@ -83,38 +83,28 @@ const loginSchema = z.object({
 });
 
 export async function login(formData: FormData) {
-  const { data, success, error } = loginSchema.safeParse(
-    Object.fromEntries(formData)
-  );
-  console.log(data)
-  // Throw Error
-  if (!success) {
-    return { error: "Something went wrong" };
+  const result = loginSchema.safeParse(Object.fromEntries(formData));
+  console.log(result);
+  // Are there any errors?
+  if (!result.success) {
+    const errors = result.error.errors.map(err => `${err.path}: ${err.message}`).join(', ');
+    return { error: `Invalid ${errors}` };
   }
 
-  if (error) {
-    return { error: "Something went terribly wrong" };
-  }
+  const { data } = result;
 
   // Find user by email
   const existingUser = await prisma.user.findUnique({
     where: { email: data.email },
   });
-  // And throw, if he doesnt exist
   if (!existingUser) {
-    return { error: "User doesn't exist" };
+    return { error: "email" };
   }
 
-  // salt and hash the input. Then compare to the hashed pair
-  const salt = await bcrypt.genSalt(10);
-  const hashed = await bcrypt.hash(data.password, salt);
-  const validPassword = bcrypt.compare(existingUser.password, hashed);
-
-  // if comparison fails, return error
+  // Compare the input password with the stored hash
+  const validPassword = await bcrypt.compare(data.password, existingUser.password);
   if (!validPassword) {
-    return {
-      error: "Password invalid",
-    };
+    return { error: "Invalid password" };
   }
 
   const session = await lucia.createSession(existingUser.id, {});
