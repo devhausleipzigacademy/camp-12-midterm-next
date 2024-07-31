@@ -1,4 +1,3 @@
-import Image from "next/image";
 type UserImageProps = {
   userName: string;
   userImage: string;

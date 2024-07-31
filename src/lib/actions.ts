@@ -2,7 +2,6 @@
 import z from "zod";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-
 import { LoginValues } from "@/app/(full-page)/login/login-form";
 import { UserSchema } from "@/components/customization-form";
 

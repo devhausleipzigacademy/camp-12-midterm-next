@@ -4,17 +4,9 @@ import { Menu } from "@headlessui/react";
 import Link from "next/link";
 import { CustomizationForm } from "@/components/customization-form";
 import { SelectAvatar } from "@/components/select-avatar";
-import { prisma } from "@/lib/db";
-import { protectPage, validateRequest } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { Lucia } from "lucia";
-import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { User as DBUser } from "@prisma/client";
+import { protectPage } from "@/lib/auth";
 
 type UserSchema = z.infer<typeof userSchema>;
-
-// TODO db push after merge
-// TODO
 
 export default async function ProfileCustomization() {
   const user = await protectPage();

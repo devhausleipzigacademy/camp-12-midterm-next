@@ -1,7 +1,6 @@
 "use client";
 import { MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { UserImage } from "@/components/user-image";
-import Image from "next/image";
 import { useState } from "react";
 
 export function SelectAvatar() {
