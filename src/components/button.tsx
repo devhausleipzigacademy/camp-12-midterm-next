@@ -1,4 +1,5 @@
-import { cn } from "@/lib/utils/styling";
+"use client";
+import { cn } from "@/lib/utils";
 
 type Props = {
   children: React.ReactNode;
