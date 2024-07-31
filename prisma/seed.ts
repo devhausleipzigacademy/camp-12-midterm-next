@@ -1,4 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client';
+import bcrypt from 'bcrypt';
+
 
 const prisma = new PrismaClient();
 
@@ -35,7 +37,15 @@ async function main() {
 
   const createdUsers = [];
   for (const user of users) {
-    const createdUser = await prisma.user.create({ data: user });
+    // Hash das Passwort
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    const createdUser = await prisma.user.create({ 
+      data: {
+        ...user,
+        password: hashedPassword,
+      }
+    });
     createdUsers.push(createdUser);
   }
 
@@ -75,10 +85,12 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+.catch((e) => {
+  console.error(e);
+  process.exit(1);
+})
+.finally(async () => {
+  await prisma.$disconnect();
+  console.log("💨🌾 As seeds are scattered by the breeze,\n\🌱🌿 our words take root and grow with ease.");
+  process.exit(0);
+});

@@ -86,34 +86,45 @@ export async function login(formData: FormData) {
   const { data, success, error } = loginSchema.safeParse(
     Object.fromEntries(formData)
   );
-
-  if (error) {
+  console.log(data)
+  // Throw Error
+  if (!success) {
     return { error: "Something went wrong" };
   }
-  const exisitingUser = await prisma.user.findUnique({
+
+  if (error) {
+    return { error: "Something went terribly wrong" };
+  }
+
+  // Find user by email
+  const existingUser = await prisma.user.findUnique({
     where: { email: data.email },
   });
-  if (!exisitingUser) {
+  // And throw, if he doesnt exist
+  if (!existingUser) {
     return { error: "User doesn't exist" };
   }
 
+  // salt and hash the input. Then compare to the hashed pair
   const salt = await bcrypt.genSalt(10);
   const hashed = await bcrypt.hash(data.password, salt);
-  const validPassword = bcrypt.compare(exisitingUser.password, hashed);
+  const validPassword = bcrypt.compare(existingUser.password, hashed);
 
+  // if comparison fails, return error
   if (!validPassword) {
     return {
       error: "Password invalid",
     };
   }
 
-  const session = await lucia.createSession(exisitingUser.id, {});
+  const session = await lucia.createSession(existingUser.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
     sessionCookie.attributes
   );
+
   return redirect("/");
 }
 
