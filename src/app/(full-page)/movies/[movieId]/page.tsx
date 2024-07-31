@@ -4,12 +4,14 @@ import Link from "next/link";
 import { MovieCredit, MovieDetail } from "@/lib/types/movie";
 import { BookmarkButton } from "./bookmark-button";
 import ReadMore from "@/components/read-more";
+import { protectPage } from "@/lib/auth";
 
 export default async function MovieDetails({
   params,
 }: {
   params: { movieId: string };
 }) {
+  await protectPage();
   const { data: movie } = await axios.get<MovieDetail>(
     `https://api.themoviedb.org/3/movie/${params.movieId}`,
     {
