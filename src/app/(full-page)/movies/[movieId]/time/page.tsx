@@ -11,7 +11,7 @@ export default function BookingTimePage({
   return (
     <div className="flex flex-col bg-dark h-dvh px-5 py-8">
       <div className="flex-col w-full items-center relative mb-8">
-        <Link href={`../../movies/${movieId}`}>
+        <Link href={`/movies/${movieId}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -36,7 +36,7 @@ export default function BookingTimePage({
         <TimeSelection />
       </div>
 
-      <Link href={`../../movies/${movieId}/select-seats`}>
+      <Link href={`/movies/${movieId}/select-seats`}>
         <div className="flex justify-center mt-auto pb-4">
           <button className="bg-yellow rounded-md text-dark-light font-semibold py-4 w-full text-sm">
             Select Seat
