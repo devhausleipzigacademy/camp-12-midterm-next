@@ -51,4 +51,6 @@ model Screening {
   movieId String
 
   reservations Reservation[]
+
+  @@unique([date, time, movieId], name: "specifics")
 }
