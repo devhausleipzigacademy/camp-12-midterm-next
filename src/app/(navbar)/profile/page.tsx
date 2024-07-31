@@ -1,7 +1,11 @@
+import { signOut } from "@/lib/actions/auth";
+
 export default function ProfilePage() {
   return (
     <div>
-      <span>Profiles</span>
+      <form action={signOut}>
+        <button>Logout</button>
+      </form>
     </div>
   );
 }
