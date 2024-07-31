@@ -4,7 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 
 export default async function MoviesPage() {
-  const movies: Movie[] = await axios
+  const movies = await axios
     .get<MovieResponse>("https://api.themoviedb.org/3/movie/now_playing", {
       params: {
         api_key: process.env.TMDB_API_KEY,
@@ -14,14 +14,9 @@ export default async function MoviesPage() {
       },
     })
     .then((res) => res.data.results);
+  console.log(movies);
 
-  return (
-    <div className="grid grid-cols-3 gap-4">
-      {movies.map((movie) => (
-        <Link href={`/movies/${movie.id}`} key={movie.id}>
-          <img src={getPosterImage(movie.poster_path)} />
-        </Link>
-      ))}
-    </div>
-  );
+  // .then((res) => res.data.results);
+
+  return <div className="grid grid-cols-3 gap-4"></div>;
 }
