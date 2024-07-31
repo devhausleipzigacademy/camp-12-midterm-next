@@ -1,41 +1,38 @@
 "use client";
 
-import { login } from "@/lib/actions";
+import { LoginInput } from "@/components/login-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Button } from "@/components/button";
+import { KeyIcon } from "@heroicons/react/24/solid";
+import { LockClosedIcon } from "@heroicons/react/24/outline";
+import { login } from "@/lib/actions/auth";
 
-const LoginSchema = z.object({
-  email: z.string().email("Please provide a valid email"),
-  password: z
-    .string()
-    .min(6, "Your Password needs to be at least 6 characters long"),
-});
-
-export type LoginValues = z.infer<typeof LoginSchema>;
+// type LoginSchema = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<LoginValues>({
-    resolver: zodResolver(LoginSchema),
-  });
-
-  function onSubmit(values: LoginValues) {
-    login(values);
-  }
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <input className="border" defaultValue="" {...register("email")} />
-      {errors.email && <span>This field needs to be a valid email</span>}
-      <input className="border" {...register("password")} />
-      {errors.password && <span>This field is required</span>}
-
-      <input type="submit" className="bg-slate-800 text-slate-200" />
+    <form action={login} className="flex flex-col justify-between">
+      <div className="flex flex-col justify-between">
+        <div className="flex flex-col gap-4">
+          <LoginInput
+            name="email"
+            icon={<KeyIcon />}
+            placeholder="Enter your email"
+            inputType="email"
+          />
+          <LoginInput
+            name="password"
+            icon={<LockClosedIcon />}
+            placeholder="Enter your password"
+            inputType="password"
+          />
+        </div>
+        <div className="flex">
+          <Button type="submit">Login</Button>
+        </div>
+      </div>
     </form>
   );
 }
