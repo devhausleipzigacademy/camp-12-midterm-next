@@ -1,9 +1,9 @@
 "use client";
 
-import { LoginInput } from "@/components/login-input";
-import { zodResolver } from "@hookform/resolvers/zod";
+/* import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { z } from "zod"; */
+import { LoginInput } from "@/components/login-input";
 import { Button } from "@/components/button";
 import { KeyIcon } from "@heroicons/react/24/solid";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
@@ -28,8 +28,6 @@ export function LoginForm() {
             placeholder="Enter your password"
             inputType="password"
           />
-        </div>
-        <div className="flex">
           <Button type="submit">Login</Button>
         </div>
       </div>
