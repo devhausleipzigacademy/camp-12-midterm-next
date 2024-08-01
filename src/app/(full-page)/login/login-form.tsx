@@ -1,19 +1,32 @@
 "use client";
 
+import { useState } from "react";
 import { LoginInput } from "@/components/login-input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/button";
 import { KeyIcon } from "@heroicons/react/24/solid";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { login } from "@/lib/actions/auth";
 
-// type LoginSchema = z.infer<typeof loginSchema>;
-
 export function LoginForm() {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setErrorMessage(null); // Reset error message on new submission
+    const formData = new FormData(event.currentTarget);
+    const result = await login(formData);
+
+    if (result && result.error) {
+      setErrorMessage(result.error);
+    }
+  };
+
   return (
-    <form action={login} className="flex flex-col justify-between">
+    <form
+      action={login}
+      onSubmit={handleSubmit}
+      className="flex flex-col justify-between"
+    >
       <div className="flex flex-col justify-between">
         <div className="flex flex-col gap-4">
           <LoginInput
@@ -28,8 +41,7 @@ export function LoginForm() {
             placeholder="Enter your password"
             inputType="password"
           />
-        </div>
-        <div className="flex">
+          {errorMessage && <span className="text-red">{errorMessage}</span>}
           <Button type="submit">Login</Button>
         </div>
       </div>

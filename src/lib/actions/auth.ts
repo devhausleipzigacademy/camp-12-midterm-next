@@ -83,37 +83,38 @@ const loginSchema = z.object({
 });
 
 export async function login(formData: FormData) {
-  const { data, success, error } = loginSchema.safeParse(
-    Object.fromEntries(formData)
-  );
-
-  if (error) {
-    return { error: "Something went wrong" };
+  const result = loginSchema.safeParse(Object.fromEntries(formData));
+  console.log(result);
+  // Are there any errors?
+  if (!result.success) {
+    const errors = result.error.errors.map(err => `${err.path}: ${err.message}`).join(', ');
+    return { error: `Invalid ${errors}` };
   }
-  const exisitingUser = await prisma.user.findUnique({
+
+  const { data } = result;
+
+  // Find user by email
+  const existingUser = await prisma.user.findUnique({
     where: { email: data.email },
   });
-  if (!exisitingUser) {
-    return { error: "User doesn't exist" };
+  if (!existingUser) {
+    return { error: "email" };
   }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashed = await bcrypt.hash(data.password, salt);
-  const validPassword = bcrypt.compare(exisitingUser.password, hashed);
-
+  // Compare the input password with the stored hash
+  const validPassword = await bcrypt.compare(data.password, existingUser.password);
   if (!validPassword) {
-    return {
-      error: "Password invalid",
-    };
+    return { error: "Invalid password" };
   }
 
-  const session = await lucia.createSession(exisitingUser.id, {});
+  const session = await lucia.createSession(existingUser.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
     sessionCookie.attributes
   );
+
   return redirect("/");
 }
 
