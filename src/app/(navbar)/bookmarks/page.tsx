@@ -1,14 +1,7 @@
-/*
- Create a new page
- Import the necessary components
- Follow the design on Figma
- Display bookmarked movies (use dummy data for now).
- */
 import React, { useState } from "react";
 import { PageButton } from "@/components/page-button";
 import { MovieCard } from "@/components/movie-card";
 import { Movie } from "@/lib/types/movie";
-import axios from "axios";
 import { getBookmarks } from "@/lib/data-access/bookmarks";
 import { protectPage } from "@/lib/auth";
 import { getMovieById } from "@/lib/data-access/movies";
@@ -19,14 +12,10 @@ const BookmarkedMovies = async ({
 }: {
   searchParams: { page: string };
 }) => {
-  //const [activePage, setActivePage] = useState<number>(1);
   const user = await protectPage();
   const bookmarks = await getBookmarks(user.id);
   const movieRequests = bookmarks.map((movieId) => getMovieById(movieId));
   const movies = await Promise.all(movieRequests);
-  //const handlePageSelect = (page: number) => {
-  // setActivePage(page);
-  // };
 
   if (movies.length === 0) {
     return (
@@ -41,9 +30,6 @@ const BookmarkedMovies = async ({
       </div>
     );
   }
-
-  // const storedMovies = JSON.parse(localStorage.Movies);
-  // console.log(storedMovies);
 
   // Calculate the index range for the current page
   const { page } = searchParams;

@@ -36,8 +36,6 @@ export async function signUp(formData: FormData) {
   );
 
   if (error) {
-    console.log(error.issues);
-
     return { error: "Something went wrong" };
   }
 
@@ -84,10 +82,10 @@ const loginSchema = z.object({
 
 export async function login(formData: FormData) {
   const result = loginSchema.safeParse(Object.fromEntries(formData));
-  console.log(result);
-  // Are there any errors?
   if (!result.success) {
-    const errors = result.error.errors.map(err => `${err.path}: ${err.message}`).join(', ');
+    const errors = result.error.errors
+      .map((err) => `${err.path}: ${err.message}`)
+      .join(", ");
     return { error: `Invalid ${errors}` };
   }
 
@@ -102,7 +100,10 @@ export async function login(formData: FormData) {
   }
 
   // Compare the input password with the stored hash
-  const validPassword = await bcrypt.compare(data.password, existingUser.password);
+  const validPassword = await bcrypt.compare(
+    data.password,
+    existingUser.password
+  );
   if (!validPassword) {
     return { error: "Invalid password" };
   }

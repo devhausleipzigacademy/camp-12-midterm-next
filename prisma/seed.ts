@@ -26,12 +26,19 @@ async function main() {
     },
   });
 
-  const screening = await prisma.screening.create({
+  await prisma.screening.create({
     data: {
-      id: "1c5feb0a-afaf-4ca8-a68a-5731ff1d3027",
-      date: "24-06-2024",
-      time: "12:30",
-      movieId: "12345",
+      date: new Date("2024-07-31"),
+      time: "20:00",
+      movieId: "533535",
+    },
+  });
+
+  await prisma.screening.create({
+    data: {
+      date: new Date("2024-08-02"),
+      time: "20:00",
+      movieId: "533535",
       reservations: {
         createMany: {
           data: [

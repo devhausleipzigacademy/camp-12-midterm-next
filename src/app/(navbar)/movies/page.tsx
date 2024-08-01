@@ -1,34 +1,17 @@
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Movie, MovieResponse } from "@/lib/types/movie";
 import { MovieCard } from "@/components/movie-card";
 import { PageButton } from "@/components/page-button";
 import axios from "axios";
+import { getMovies } from "@/lib/data-access/movies";
 
-// Server component to fetch movie data
-const fetchMovies = async (): Promise<MovieResponse | null> => {
-  try {
-    const response = await axios.get(
-      "https://api.themoviedb.org/3/movie/now_playing",
-      {
-        params: {
-          api_key: process.env.TMDB_API_KEY,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching movies:", error);
-    return null;
-    // return [];
-  }
-};
-
-// Movies overview page component
-const Movies = async ({ searchParams }: { searchParams: { page: string } }) => {
+export default async function Movies({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) {
   // Fetch movies on the server side
-  const movies = await fetchMovies();
-  console.log(movies);
+  const movies = await getMovies();
 
   const { page } = searchParams;
 
@@ -68,6 +51,4 @@ const Movies = async ({ searchParams }: { searchParams: { page: string } }) => {
       </div>
     </div>
   );
-};
-
-export default Movies;
+}

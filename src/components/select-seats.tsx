@@ -4,21 +4,27 @@ import { Button } from "./button";
 import { SeatCart } from "./seat-cart";
 import { Seat as SeatType } from "@/lib/types/seats";
 import { SeatMap } from "./seat-map";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { BookingContext } from "@/providers/booking-context";
+import { createReservation } from "@/lib/actions/booking";
 
 type Props = {
+  userId: string;
+  screeningId: string;
   leftSeats: SeatType[];
   rightSeats: SeatType[];
   reservedSeats: string[];
 };
 
 export default function SelectSeats({
+  userId,
+  screeningId,
   leftSeats,
   rightSeats,
   reservedSeats,
 }: Props) {
   // TODO: Use seats from context
-  const [seats, setSeats] = useState<string[]>([]);
+  const { seats, setSeats } = useContext(BookingContext);
 
   // Move into Seat and get seats from context
   const handleSeatChange = (seatId: string) => {
@@ -132,7 +138,13 @@ export default function SelectSeats({
             </div>
           </div>
           <div className="col-start-3 flex items-center w-52 h-12 mt-2">
-            <Button variant="primary" size="default">
+            <Button
+              onClick={async () =>
+                await createReservation(userId, screeningId, seats)
+              }
+              variant="primary"
+              size="default"
+            >
               Book Ticket
             </Button>
           </div>

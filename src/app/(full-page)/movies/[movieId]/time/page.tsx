@@ -1,12 +1,41 @@
 import Link from "next/link";
 import { TimeSelection } from "./time-selection";
+import { prisma } from "@/lib/db";
+import { format } from "date-fns";
+import { Screening } from "@prisma/client";
 
-export default function BookingTimePage({
+export default async function BookingTimePage({
   params,
 }: {
   params: { movieId: string };
 }) {
   const { movieId } = params;
+
+  const screenings = await prisma.screening.findMany({
+    where: {
+      AND: [
+        { movieId },
+        {
+          date: {
+            gte: new Date(),
+          },
+        },
+      ],
+    },
+  });
+
+  const groupedScreenings = screenings.reduce<Record<string, Screening[]>>(
+    (acc, screening) => {
+      const date = format(screening.date, "yyyy-MM-dd");
+      if (acc[date]) {
+        acc[date].push(screening);
+      } else {
+        acc[date] = [screening];
+      }
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className="flex flex-col bg-dark h-dvh px-5 py-8">
@@ -33,16 +62,8 @@ export default function BookingTimePage({
         <div className="text-white-dimmed text-sm py-2 px-2 font-bold">
           DATE
         </div>
-        <TimeSelection />
+        <TimeSelection movieId={movieId} screenings={groupedScreenings} />
       </div>
-
-      <Link href={`/movies/${movieId}/select-seats`}>
-        <div className="flex justify-center mt-auto pb-4">
-          <button className="bg-yellow rounded-md text-dark-light font-semibold py-4 w-full text-sm">
-            Select Seat
-          </button>
-        </div>
-      </Link>
     </div>
   );
 }

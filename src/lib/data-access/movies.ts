@@ -34,3 +34,15 @@ export async function getMovieById(movieId: string) {
     })
     .then((res) => res.data);
 }
+
+export async function getMovies() {
+  const response = await axios.get(
+    "https://api.themoviedb.org/3/movie/now_playing",
+    {
+      params: {
+        api_key: process.env.TMDB_API_KEY,
+      },
+    }
+  );
+  return response.data;
+}

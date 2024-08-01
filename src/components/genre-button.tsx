@@ -25,7 +25,6 @@ export function GenreButton({ genre, ...rest }: Props) {
               .filter((g) => g !== genre.id.toString())
               .map((g) => `genre=${g}`)
               .join("&");
-            console.log(newParams);
 
             router.replace(`/?${newParams}`);
           } else {

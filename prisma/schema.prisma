@@ -55,8 +55,8 @@ model Reservation {
 }
 
 model Screening {
-  id      String @id @default(uuid())
-  date    String
+  id      String   @id @default(uuid())
+  date    DateTime
   time    String
   movieId String
 

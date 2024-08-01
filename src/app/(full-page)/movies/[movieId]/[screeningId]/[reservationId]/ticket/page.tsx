@@ -1,27 +1,48 @@
 import { Button } from "@/components/button";
+import { getMovieById } from "@/lib/data-access/movies";
+import { prisma } from "@/lib/db";
+import { format } from "date-fns";
 import Link from "next/link";
-import axios from "axios";
 import { TicketBarcode } from "./barcode";
 
 export default async function TicketPage({
   params,
 }: {
-  params: { movieId: string };
+  params: { movieId: string; screeningId: string; reservationId: string };
 }) {
-  // const movie = await getMovieDetails(params.movieId);
+  const movie = await getMovieById(params.movieId);
 
-  const movie = await axios
-    .get(
-      `https://api.themoviedb.org/3/movie/${params.movieId}?api_key=${process.env.TMDB_API_KEY}&language=en-US`
-    )
-    .then((res) => res.data);
-  console.log(movie);
+  const reservation = await prisma.reservation.findUnique({
+    where: { id: params.reservationId },
+  });
 
-  const totalPrice = 14.99;
+  const screening = await prisma.screening.findUnique({
+    where: { id: params.screeningId },
+  });
 
-  const selectedSeats = ["A1", "A2", "A3"];
-  const date = "2024-03-01";
-  const time = "12:00 PM";
+  if (!reservation || !screening) {
+    return <p>Something went wrong</p>;
+  }
+
+  const prices: Record<"front" | "middle" | "back", number> = {
+    front: 12.99,
+    middle: 14.99,
+    back: 16.99,
+  };
+
+  const totalPrice = reservation.bookedSeats.reduce((acc, seat) => {
+    if (seat[0] === "A") {
+      return (acc += prices.front);
+    } else if (seat[0] === "F") {
+      return (acc += prices.back);
+    } else {
+      return (acc += prices.middle);
+    }
+  }, 0);
+
+  const selectedSeats = reservation.bookedSeats;
+  const date = format(screening.date, "dd-MM-yyyy");
+  const time = screening.time;
 
   const imageUrl =
     movie && movie.backdrop_path

@@ -2,23 +2,22 @@ import Link from "next/link";
 import SelectSeats from "@/components/select-seats";
 import { prisma } from "@/lib/db";
 import { generateSeats } from "@/lib/seats";
+import { GetBookingInfo } from "@/components/get-booking-info";
+import { protectPage } from "@/lib/auth";
 
 export default async function ReservationPage({
   params,
 }: {
   params: {
     movieId: string;
+    screeningId: string;
   };
 }) {
   const movieId = params.movieId;
+  const user = await protectPage();
+
   const screening = await prisma.screening.findUnique({
-    where: {
-      specifics: {
-        date: "31-07-2024",
-        time: "17:00",
-        movieId,
-      },
-    },
+    where: { id: params.screeningId },
     include: {
       reservations: true,
     },
@@ -75,6 +74,8 @@ export default async function ReservationPage({
 
       {/* BEGIN OF SEAT ROWS */}
       <SelectSeats
+        userId={user.id}
+        screeningId={params.screeningId}
         leftSeats={leftSeats}
         rightSeats={rightSeats}
         reservedSeats={bookedSeats}

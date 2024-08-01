@@ -41,8 +41,6 @@ export async function updateUser(id: string, values: UpdateUserInput) {
       },
     });
   } catch (error) {
-    console.log(error);
-
     if (error instanceof z.ZodError) {
       return { message: "Validation failed", error: error.issues };
     }
