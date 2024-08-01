@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import Image from "next/image";
-
-=======
->>>>>>> 6681dba4ef61068a6f04d8b953e285010332bf87
 type Props = {
   title: string;
   year: string;
@@ -12,11 +7,7 @@ type Props = {
 export function MovieCard({ title, year, poster }: Props) {
   return (
     <div className="relative group w-full pb-[150%] overflow-hidden">
-<<<<<<< HEAD
-      <Image
-=======
       <img
->>>>>>> 6681dba4ef61068a6f04d8b953e285010332bf87
         src={`https://image.tmdb.org/t/p/w500${poster}`}
         alt={title}
         className="absolute inset-0 w-full h-full object-cover"
