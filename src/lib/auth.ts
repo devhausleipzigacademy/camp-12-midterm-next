@@ -18,8 +18,10 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => {
     return {
       // attributes has the type of DatabaseUserAttributes
+      id: attributes.id,
       email: attributes.email,
       firstName: attributes.firstName,
+      lastName: attributes.lastName,
       avatarImage: attributes.avatarImage,
     };
   },
@@ -73,6 +75,7 @@ export async function protectPage() {
   if (!user) {
     return redirect("/login");
   }
+  return user;
 }
 
 export async function assertNotAuthenticated() {

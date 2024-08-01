@@ -1,4 +1,6 @@
 import React from "react";
+import { cn } from "@/lib/utils";
+
 
 type Props = {
   active?: boolean;
@@ -8,9 +10,10 @@ type Props = {
 export const PageButton = ({ active = false, page, ...props }: Props) => {
   return (
     <button
-      className={`text-dark-light size-8 rounded-sm text-xs ${
+      className={cn(
+        "text-dark-light size-8 rounded-sm text-xs",
         active ? "bg-yellow" : "bg-white-dimmed"
-      }`}
+      )}
       {...props}
     >
       {page}

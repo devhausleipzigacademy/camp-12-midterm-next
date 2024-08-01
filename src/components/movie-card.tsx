@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 type Props = {
   title: string;
   year: string;
@@ -9,7 +7,7 @@ type Props = {
 export function MovieCard({ title, year, poster }: Props) {
   return (
     <div className="relative group w-full pb-[150%] overflow-hidden">
-      <Image
+      <img
         src={`https://image.tmdb.org/t/p/w500${poster}`}
         alt={title}
         className="absolute inset-0 w-full h-full object-cover"
