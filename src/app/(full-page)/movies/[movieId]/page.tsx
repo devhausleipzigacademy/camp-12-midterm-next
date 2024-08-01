@@ -1,20 +1,30 @@
-import { useState } from "react";
-import { GetServerSideProps } from "next";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Movie } from "../../../../lib/types/movie";
 import { MovieCard } from "../../../../components/movie-card";
 import { PageButton } from "../../../../components/page-button";
 import axios from "axios";
 
-interface MoviesProps {
-  movies: Movie[];
-}
+// Server component to fetch movie data
+const fetchMovies = async (): Promise<Movie[]> => {
+  try {
+    const response = await axios.get("https://api.example.com/movies"); // Replace with your API endpoint
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    return [];
+  }
+};
 
-const Movies = ({ movies }: MoviesProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
+// Movies overview page component
+const Movies = async () => {
+  // Fetch movies on the server side
+  const movies = await fetchMovies();
 
-  const handlePageSelect = (page: number) => {
-    setCurrentPage(page);
-  };
+  // Get the current page from the URL query parameters
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
 
   // Calculate the index range for the current page
   const moviesPerPage = 4;
@@ -41,35 +51,13 @@ const Movies = ({ movies }: MoviesProps) => {
       </div>
       <div className="flex justify-between w-full max-w-2xl mt-4">
         {Array.from({ length: totalPages }, (_, index) => (
-          <PageButton
-            key={index + 1}
-            page={index + 1}
-            active={currentPage === index + 1}
-            onClick={() => handlePageSelect(index + 1)}
-          />
+          <Link href={`/movies?page=${index + 1}`} key={index + 1}>
+            <PageButton page={index + 1} active={currentPage === index + 1} />
+          </Link>
         ))}
       </div>
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const response = await axios.get("https://api.example.com/movies"); // Replace with your API endpoint
-    const movies: Movie[] = response.data;
-
-    return {
-      props: {
-        movies,
-      },
-    };
-  } catch (error) {
-    return {
-      props: {
-        movies: [],
-      },
-    };
-  }
 };
 
 export default Movies;
