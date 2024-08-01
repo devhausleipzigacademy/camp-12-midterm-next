@@ -1,18 +1,18 @@
+import { GenreButton } from "@/components/genre-button";
+import { MovieCard } from "@/components/movie-card";
+import { SectionTitle } from "@/components/section-title";
+import { protectPage } from "@/lib/auth";
 import { GenreType, MovieResponse } from "@/lib/types/movie";
 import axios from "axios";
 import { HomepageHeader } from "./header";
-import { SectionTitle } from "@/components/section-title";
-import { GenreButton } from "@/components/genre-button";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { protectPage, validateRequest } from "@/lib/auth";
+import { Search } from "./search";
 
 export default async function HomePage({
   searchParams,
 }: {
   searchParams: { genre: string | string[] };
 }) {
-  await protectPage();
+  const user = await protectPage();
 
   const selectedGenres = Array.isArray(searchParams.genre)
     ? searchParams.genre
@@ -54,12 +54,10 @@ export default async function HomePage({
     <div className="bg-dark overflow-hidden pt-8">
       <div className="px-5 mb-4 flex flex-col gap-6">
         <HomepageHeader
-          userName={"Herr Vogel"}
-          userImage={
-            "https://devhausleipzig.de/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fjulian.b86ca7f2.jpg&w=3840&q=75"
-          }
+          firstName={user.firstName}
+          userImage={user.avatarImage ?? ""}
         />
-        {/* <ComboSearchBox placeholder={"Search"} /> */}
+        <Search movies={movies} />
         <div className="flex flex-col gap-4">
           <SectionTitle text={"Genre"} ShowSeeAll={true} route="/genres" />
           <div className="flex justify-between text-white">
@@ -68,8 +66,6 @@ export default async function HomePage({
                 key={genre.id}
                 genre={genre}
                 // TODO: make this interactive again
-                selected={false}
-                // onClick={() => handleClick(genre.name)}
               />
             ))}
           </div>
@@ -78,18 +74,12 @@ export default async function HomePage({
       </div>
       <div className="flex gap-6 overflow-y-hidden scrollbar-hide snap-x h-56 mx-4 text-white">
         {filteredMovies.map((movie) => (
-          <Link
+          <MovieCard
             key={movie.id}
-            href={`/movies/${movie.id}`}
-            className="rounded-md snap-center flex-shrink-0 w-36"
-          >
-            <img
-              key={movie.id}
-              className="h-full w-full"
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-            />
-          </Link>
+            id={movie.id}
+            title={movie.title}
+            poster={movie.poster_path}
+          />
         ))}
       </div>
     </div>

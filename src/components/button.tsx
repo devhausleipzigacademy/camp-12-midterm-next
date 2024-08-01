@@ -1,14 +1,11 @@
 "use client";
 import { cn } from "@/lib/utils";
+import { ComponentProps } from "react";
 
 type Props = {
-  children: React.ReactNode;
   variant?: "primary" | "secondary";
-  type?: "button" | "submit";
   size?: "default" | "small";
-  className?: string;
-  onClick?: () => void;
-};
+} & ComponentProps<"button">;
 
 export function Button({
   children,

@@ -12,8 +12,13 @@ import axios from "axios";
 import { getBookmarks } from "@/lib/data-access/bookmarks";
 import { protectPage } from "@/lib/auth";
 import { getMovieById } from "@/lib/data-access/movies";
+import Link from "next/link";
 
-const BookmarkedMovies: React.FC = async () => {
+const BookmarkedMovies = async ({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) => {
   //const [activePage, setActivePage] = useState<number>(1);
   const user = await protectPage();
   const bookmarks = await getBookmarks(user.id);
@@ -41,15 +46,19 @@ const BookmarkedMovies: React.FC = async () => {
   // console.log(storedMovies);
 
   // Calculate the index range for the current page
+  const { page } = searchParams;
+
+  const currentPage = page ? parseInt(page) : 1;
+
   const moviesPerPage = 4;
-  //const startIndex = (activePage - 1) * moviesPerPage;
-  //const endIndex = startIndex + moviesPerPage;
+  const startIndex = (currentPage - 1) * moviesPerPage;
+  const endIndex = startIndex + moviesPerPage;
 
   // slice movies array to display only 4 per page
-  // const paginatedMovies = movies?.slice(startIndex, endIndex) || [];
+  const paginatedMovies = movies.slice(startIndex, endIndex);
 
-  // determine number of total pages
-  const totalPages = Math.ceil((movies?.length || 0) / moviesPerPage);
+  // Determine the total number of pages
+  const totalPages = Math.ceil(movies.length / moviesPerPage);
 
   return (
     <div
@@ -57,26 +66,21 @@ const BookmarkedMovies: React.FC = async () => {
       className="flex flex-col bg-dark px-5 pt-8 h-full justify-between"
     >
       <div className="grid grid-cols-2 gap-5">
-        {movies.map((movie: Movie) => (
+        {paginatedMovies.map((movie: Movie) => (
           <MovieCard
             key={movie.id}
-            year={movie.release_date.split("-")[0]}
+            id={movie.id}
             title={movie.title}
             poster={movie.poster_path}
           />
         ))}
       </div>
       <div id="button-div" className="flex justify-center gap-4 mt-5">
-        {/* {Array.from({ length: totalPages }, (_, index) => (
-          <div className="flex flex-end">
-            <PageButton
-              key={index + 1}
-              page={index + 1}
-              active={activePage === index + 1}
-              onClick={() => handlePageSelect(index + 1)}
-            />
-          </div>
-        ))} */}
+        {Array.from({ length: totalPages }, (_, index) => (
+          <Link href={`/bookmarks?page=${index + 1}`} key={index + 1}>
+            <PageButton page={index + 1} active={currentPage === index + 1} />
+          </Link>
+        ))}
       </div>
     </div>
   );

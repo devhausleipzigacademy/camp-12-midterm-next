@@ -53,7 +53,7 @@ const Movies = async ({ searchParams }: { searchParams: { page: string } }) => {
         {paginatedMovies.map((movie: Movie) => (
           <MovieCard
             key={movie.id}
-            year={movie.release_date.split("-")[0]}
+            id={movie.id}
             title={movie.title}
             poster={movie.poster_path}
           />

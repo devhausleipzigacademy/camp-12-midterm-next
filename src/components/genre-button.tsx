@@ -3,18 +3,17 @@
 import { Genre, genreEmojis } from "@/lib/genre";
 import { GenreType } from "@/lib/types/movie";
 import { cn } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   genre: GenreType;
-  selected: boolean;
 };
 
-export function GenreButton({ genre, selected, ...rest }: Props) {
+export function GenreButton({ genre, ...rest }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const selected = searchParams.getAll("genre").includes(genre.id.toString());
 
   return (
     <div className="flex flex-col gap-2 items-center">

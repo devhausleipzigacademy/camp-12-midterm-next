@@ -2,29 +2,29 @@
 import userSchema from "@/lib/types/schemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input, Button } from "@headlessui/react";
+// import { Input, Button } from "@headlessui/react";
+import { LoginInput as Input } from "@/components/input";
+import { Button } from "@/components/button";
 import { z } from "zod";
 import { User } from "lucia";
-import { updateUser } from "@/lib/actions";
-
-export type UserSchema = z.infer<typeof userSchema>;
+import { updateUser } from "@/lib/actions/profile";
+import { UpdateUserInput, updateUserSchema } from "@/lib/validation/profile";
 
 export function CustomizationForm({ user }: { user: User }) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<UserSchema>({
+  } = useForm<UpdateUserInput>({
     defaultValues: {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      password: "",
     },
-    resolver: zodResolver(userSchema),
+    resolver: zodResolver(updateUserSchema),
   });
 
-  const onSubmit = async (data: UserSchema) => {
+  const onSubmit = async (data: UpdateUserInput) => {
     console.log("Form submitted with data:", data);
     await updateUser(user.id, data);
     // Handle form submission
@@ -94,11 +94,11 @@ export function CustomizationForm({ user }: { user: User }) {
         )}
       </div>
 
-      <div className="text-dark-light bg-yellow mt-auto mb-4 rounded-md pt-2 pb-2 text-center">
-        <Button type="submit" disabled={isSubmitting}>
-          Save Data
-        </Button>
-      </div>
+      {/* <div className="text-dark-light bg-yellow mt-auto mb-4 rounded-md pt-2 pb-2 text-center"> */}
+      <Button type="submit" disabled={isSubmitting}>
+        Save Data
+      </Button>
+      {/* </div> */}
     </form>
   );
 }
