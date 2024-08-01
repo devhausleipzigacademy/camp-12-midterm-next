@@ -1,18 +1,17 @@
-import Link from "next/link";
+import { NavBar } from "./nav-bar";
 
 export default function NavBarLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // navigate to login page if no authentifictaion
+
   return (
-    <div>
-      {children}
-      <nav className="flex gap-4">
-        <Link href="/">Home</Link>
-        <Link href="/movies">Movies</Link>
-        <Link href="/bookmarks">Bookmarks</Link>
-        <Link href="/profile">Profile</Link>
+    <div className="h-screen flex flex-col bg-dark">
+      <div className="flex-1">{children}</div>
+      <nav>
+        <NavBar />
       </nav>
     </div>
   );
