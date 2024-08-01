@@ -8,7 +8,9 @@ import axios from "axios";
 // Server component to fetch movie data
 const fetchMovies = async (): Promise<Movie[]> => {
   try {
-    const response = await axios.get("https://api.example.com/movies"); // Replace with your API endpoint
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/movie/now_playing"
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching movies:", error);
