@@ -9,20 +9,15 @@ import { PageButton } from "@/components/page-button";
 import { MovieCard } from "@/components/movie-card";
 import { Movie } from "@/lib/types/movie";
 import axios from "axios";
-
-const bookmarks = ["533535", "573435"];
+import { getBookmarks } from "@/lib/data-access/bookmarks";
+import { protectPage } from "@/lib/auth";
+import { getMovieById } from "@/lib/data-access/movies";
 
 const BookmarkedMovies: React.FC = async () => {
   //const [activePage, setActivePage] = useState<number>(1);
-  const fetchMovie = (id: string) =>
-    axios
-      .get<Movie>(`https://api.themoviedb.org/3/movie/${id}`, {
-        params: {
-          api_key: process.env.TMDB_API_KEY,
-        },
-      })
-      .then((res) => res.data);
-  const movieRequests = bookmarks.map((id) => fetchMovie(id));
+  const user = await protectPage();
+  const bookmarks = await getBookmarks(user.id);
+  const movieRequests = bookmarks.map((movieId) => getMovieById(movieId));
   const movies = await Promise.all(movieRequests);
   //const handlePageSelect = (page: number) => {
   // setActivePage(page);

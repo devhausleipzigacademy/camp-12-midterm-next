@@ -12,7 +12,7 @@ export interface Movie {
   details: any;
 }
 
-export async function getMovieDetails(movieId: string): Promise<Movie> {
+export async function getMovieDetails(movieId: string) {
   const response = await fetch(
     `${BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=en-US`,
     { next: { revalidate: 3600 } }
