@@ -4,12 +4,14 @@ import { prisma } from "@/lib/db";
 import { format } from "date-fns";
 import Link from "next/link";
 import { TicketBarcode } from "./barcode";
+import { protectPage } from "@/lib/auth";
 
 export default async function TicketPage({
   params,
 }: {
   params: { movieId: string; screeningId: string; reservationId: string };
 }) {
+  const user = await protectPage();
   const movie = await getMovieById(params.movieId);
 
   const reservation = await prisma.reservation.findUnique({
@@ -59,7 +61,8 @@ export default async function TicketPage({
             }}
           ></div>
           <div className="px-6 pb-2">
-            <h1 className="text-2xl font-bold mb-4 mt-2">{movie?.title}</h1>
+            <h1 className="text-2xl font-bold mb-2 mt-2">{movie?.title}</h1>
+            <p>Enjoy the movie {user.firstName}</p>
             <div className="flex flex-row gap-8 gap-y-4 flex-wrap justify-between ">
               <div className="flex flex-col">
                 <h3 className="text-dark text-sm">Date</h3>
