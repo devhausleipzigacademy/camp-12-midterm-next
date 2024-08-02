@@ -11,18 +11,20 @@ export default async function BookingTimePage({
 }) {
   const { movieId } = params;
 
+  // Fetch screenings for the given movieId, where the date is greater than or equal to the current date
   const screenings = await prisma.screening.findMany({
     where: {
       AND: [
-        { movieId },
+        { movieId }, // Matches the movieId
         {
           date: {
-            gte: new Date(),
+            gte: new Date(), // Is greater than or equal to the current date
           },
         },
       ],
     },
   });
+  console.log(screenings);
 
   const groupedScreenings = screenings.reduce<Record<string, Screening[]>>(
     (acc, screening) => {

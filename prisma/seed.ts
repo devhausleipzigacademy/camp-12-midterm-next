@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 async function main() {
   await prisma.reservation.deleteMany();
   await prisma.screening.deleteMany();
+  await prisma.bookmark.deleteMany();
   await prisma.user.deleteMany();
 
   // define a screening
@@ -36,7 +37,7 @@ async function main() {
 
   await prisma.screening.create({
     data: {
-      date: new Date("2024-08-02"),
+      date: new Date("2024-10-02"),
       time: "20:00",
       movieId: "533535",
       reservations: {
