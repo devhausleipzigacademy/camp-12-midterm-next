@@ -6,6 +6,7 @@ import {
   HomeIcon,
   QueueListIcon,
   UserIcon,
+  ArchiveBoxArrowDownIcon,
 } from "@heroicons/react/24/solid";
 
 const navItems = [
@@ -13,6 +14,7 @@ const navItems = [
   { icon: FilmIcon, route: "/movies" },
   { icon: QueueListIcon, route: "/bookmarks" },
   { icon: UserIcon, route: "/profile" },
+  { icon: ArchiveBoxArrowDownIcon, route: "/tickets" },
 ];
 
 export function NavBar() {
