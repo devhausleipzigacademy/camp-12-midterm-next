@@ -23,11 +23,11 @@ export function ReservationCard({ title, id, poster, time , date, bookedSeats, h
       href={href}
       className="rounded-lg snap-center bg-dark-light"
     >
-      <div className="flex h-26">
+      <div className="flex h-32">
         <div className="w-1/3">
           <img
             key={id}
-            className="h-full w-full rounded-lg"
+            className="h-full aspect-auto rounded-lg"
             src={`https://image.tmdb.org/t/p/w500${poster}`}
             alt={title}
           />

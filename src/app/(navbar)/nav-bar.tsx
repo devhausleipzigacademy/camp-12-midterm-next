@@ -13,8 +13,8 @@ const navItems = [
   { icon: HomeIcon, route: "/" },
   { icon: FilmIcon, route: "/movies" },
   { icon: QueueListIcon, route: "/bookmarks" },
-  { icon: UserIcon, route: "/profile" },
   { icon: ArchiveBoxArrowDownIcon, route: "/tickets" },
+  { icon: UserIcon, route: "/profile" },
 ];
 
 export function NavBar() {
