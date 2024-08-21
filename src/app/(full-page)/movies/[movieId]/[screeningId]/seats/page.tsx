@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { generateSeats } from "@/lib/seats";
 import { GetBookingInfo } from "@/components/get-booking-info";
 import { protectPage } from "@/lib/auth";
+import { getSnacks } from "@/lib/data-access/snacks";
 
 export default async function ReservationPage({
   params,
@@ -15,6 +16,8 @@ export default async function ReservationPage({
 }) {
   const movieId = params.movieId;
   const user = await protectPage();
+
+  const nothing = await getSnacks();
 
   const screening = await prisma.screening.findUnique({
     where: { id: params.screeningId },
